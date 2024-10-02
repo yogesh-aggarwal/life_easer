@@ -6,12 +6,15 @@ import 'package:life_easer/types/user.dart';
 
 class UserProvider with ChangeNotifier {
   User? user;
-  bool isListening = false;
 
   StreamSubscription? _listener;
   StreamSubscription? _userListener;
 
-  void listen(String uid) {
+  String? getUID() {
+    return auth.currentUser?.uid;
+  }
+
+  void _listen(String uid) {
     if (user != null && user!.id != uid) {
       _userListener?.cancel();
     }
@@ -25,17 +28,20 @@ class UserProvider with ChangeNotifier {
   }
 
   initAuth({required Function onUserAvailable}) {
-    _listener?.cancel();
+    if (_listener != null) return;
+
     _listener = auth.authStateChanges().listen((user) async {
       if (user == null) {
         this.user = null;
         _userListener?.cancel();
         notifyListeners();
+
+        return;
       }
 
       onUserAvailable();
 
-      listen(user!.uid);
+      _listen(user.uid);
     });
   }
 }

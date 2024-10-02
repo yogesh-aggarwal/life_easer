@@ -2,11 +2,11 @@ import "package:firebase_core/firebase_core.dart";
 import "package:flutter/material.dart";
 import "package:life_easer/core/firebase_options.dart";
 import "package:life_easer/pages/login/login.dart";
-import "package:life_easer/providers/user.dart";
-import "package:provider/provider.dart";
-
 import "package:life_easer/pages/mailing/mailing.dart";
+import "package:life_easer/providers/email_jobs.dart";
+import "package:life_easer/providers/user.dart";
 import "package:lucide_icons/lucide_icons.dart";
+import "package:provider/provider.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +16,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => EmailJobsProvider()),
       ],
       child: Application(),
     ),
@@ -53,7 +54,7 @@ class _RootState extends State<Root> {
     super.initState();
 
     context.read<UserProvider>().initAuth(onUserAvailable: () {
-      // print(context.read<UserProvider>().user);
+      context.read<EmailJobsProvider>().listenForCurrentUser();
     });
   }
 
