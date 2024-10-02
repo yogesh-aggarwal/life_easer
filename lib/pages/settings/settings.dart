@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:life_easer/providers/publishing_jobs.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:provider/provider.dart';
 
-class PublishingPage extends StatefulWidget {
-  const PublishingPage({super.key});
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
 
   @override
-  State<PublishingPage> createState() => _PublishingPageState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _PublishingPageState extends State<PublishingPage> {
+class _SettingsPageState extends State<SettingsPage> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       title: Text(
-        "Publishing",
+        "Settings",
         style: Theme.of(context).textTheme.titleMedium!.copyWith(
               fontSize: 19,
               fontWeight: FontWeight.w400,
@@ -33,9 +31,6 @@ class _PublishingPageState extends State<PublishingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final jobs = context.watch<PublishingJobsProvider>().jobs;
-    print(jobs);
-
     return Scaffold(
       appBar: _buildAppBar(),
       floatingActionButton: _buildFloatingActionButton(),

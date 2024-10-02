@@ -3,6 +3,8 @@ import "package:flutter/material.dart";
 import "package:life_easer/core/firebase_options.dart";
 import "package:life_easer/pages/login/login.dart";
 import "package:life_easer/pages/mailing/mailing.dart";
+import "package:life_easer/pages/publishing/publishing.dart";
+import "package:life_easer/pages/settings/settings.dart";
 import "package:life_easer/providers/email_jobs.dart";
 import "package:life_easer/providers/publishing_jobs.dart";
 import "package:life_easer/providers/user.dart";
@@ -51,6 +53,12 @@ class Root extends StatefulWidget {
 class _RootState extends State<Root> {
   int _selectedIndex = 0;
 
+  final List<Widget> _pages = [
+    const MailingPage(),
+    const PublishingPage(),
+    const SettingsPage(),
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -61,33 +69,8 @@ class _RootState extends State<Root> {
     });
   }
 
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      title: Text(
-        "Mailing",
-        style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              fontSize: 19,
-              fontWeight: FontWeight.w500,
-            ),
-      ),
-      centerTitle: true,
-    );
-  }
-
-  Widget? _buildFloatingActionButton() {
-    return FloatingActionButton(
-      child: Icon(LucideIcons.plus),
-      onPressed: () {},
-    );
-  }
-
   Widget? _buildBody() {
-    switch (_selectedIndex) {
-      case 0:
-        return const MailingPage();
-    }
-
-    return null;
+    return SafeArea(child: _pages[_selectedIndex]);
   }
 
   Widget _buildBottomNavigationBar() {
@@ -117,10 +100,8 @@ class _RootState extends State<Root> {
     }
 
     return Scaffold(
-      appBar: _buildAppBar(),
-      floatingActionButton: _buildFloatingActionButton(),
+      body: _buildBody(),
       bottomNavigationBar: _buildBottomNavigationBar(),
-      body: Scaffold(body: _buildBody()),
     );
   }
 }
