@@ -4,6 +4,7 @@ import "package:life_easer/core/firebase_options.dart";
 import "package:life_easer/pages/login/login.dart";
 import "package:life_easer/pages/mailing/mailing.dart";
 import "package:life_easer/providers/email_jobs.dart";
+import "package:life_easer/providers/publishing_jobs.dart";
 import "package:life_easer/providers/user.dart";
 import "package:lucide_icons/lucide_icons.dart";
 import "package:provider/provider.dart";
@@ -17,6 +18,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => EmailJobsProvider()),
+        ChangeNotifierProvider(create: (_) => PublishingJobsProvider()),
       ],
       child: Application(),
     ),
@@ -55,6 +57,7 @@ class _RootState extends State<Root> {
 
     context.read<UserProvider>().initAuth(onUserAvailable: () {
       context.read<EmailJobsProvider>().listenForCurrentUser();
+      context.read<PublishingJobsProvider>().listenForCurrentUser();
     });
   }
 
@@ -97,13 +100,11 @@ class _RootState extends State<Root> {
       },
       destinations: const <NavigationDestination>[
         NavigationDestination(
-          icon: Icon(LucideIcons.mailbox),
-          label: "Mailing",
-        ),
+            icon: Icon(LucideIcons.mailbox), label: "Mailing"),
         NavigationDestination(
-          icon: Icon(LucideIcons.settings),
-          label: "Settings",
-        ),
+            icon: Icon(LucideIcons.newspaper), label: "Publishing"),
+        NavigationDestination(
+            icon: Icon(LucideIcons.settings), label: "Settings"),
       ],
     );
   }
@@ -119,7 +120,7 @@ class _RootState extends State<Root> {
       appBar: _buildAppBar(),
       floatingActionButton: _buildFloatingActionButton(),
       bottomNavigationBar: _buildBottomNavigationBar(),
-      body: _buildBody(),
+      body: Scaffold(body: _buildBody()),
     );
   }
 }

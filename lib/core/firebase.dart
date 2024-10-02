@@ -13,3 +13,4 @@ final storage = FirebaseStorage.instance;
 
 final usersColl = firestore.collection("users");
 final emailJobsColl = firestore.collection("jobs");
+final publishingJobsColl = firestore.collection("publishing_jobs");
