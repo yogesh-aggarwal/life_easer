@@ -1,0 +1,22 @@
+{
+   "flutter": {
+      "platforms": {
+         "android": {
+            "default": {
+               "projectId": "life-easer",
+               "appId": "1:198071394704:android:0a52b90ed5f0440e9c5315",
+               "fileOutput": "android/app/google-services.json"
+            }
+         },
+         "dart": {
+            "lib/firebase_options.dart": {
+               "projectId": "life-easer",
+               "configurations": {
+                  "android": "1:198071394704:android:0a52b90ed5f0440e9c5315",
+                  "web": "1:198071394704:web:46a05940846ce88c9c5315"
+               }
+            }
+         }
+      }
+   }
+}

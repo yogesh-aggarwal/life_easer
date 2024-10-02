@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "198071394704",
+    "project_id": "life-easer",
+    "storage_bucket": "life-easer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:198071394704:android:0a52b90ed5f0440e9c5315",
+        "android_client_info": {
+          "package_name": "in.yogeshaggarwal.life_easer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "198071394704-53hsbsmkspr40h75l9smghk2iqicn3ts.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCe8wzUzIwucDTymmHccvUF7hnozSYY52Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "198071394704-53hsbsmkspr40h75l9smghk2iqicn3ts.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
