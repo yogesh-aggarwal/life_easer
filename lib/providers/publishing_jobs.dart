@@ -12,8 +12,8 @@ class PublishingJobsProvider with ChangeNotifier {
 
   void _handleSnapshot(snapshot) {
     jobs = snapshot.docs
-        .map((doc) => PublishingJob.fromMap(doc.data()))
-        .toList<PublishingJob>();
+        .map((doc) => PublishingJob.fromMap(doc.data() as Map<String, dynamic>))
+        .toList();
     notifyListeners();
   }
 
