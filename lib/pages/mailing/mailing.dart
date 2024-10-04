@@ -1,8 +1,89 @@
-import 'package:flutter/material.dart';
-import 'package:life_easer/types/email_job.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:life_easer/core/utils.dart';
+import 'package:velocity_x/velocity_x.dart';
+
+import 'package:life_easer/providers/email_jobs.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:life_easer/providers/email_jobs.dart';
+
+class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(
+      color: CupertinoTheme.of(context)
+          .barBackgroundColor
+          .withOpacity(1), // Background for the search bar
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12).copyWith(
+          bottom: 0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            [
+              "Companies".text.xl4.bold.make(),
+              CupertinoButton(
+                onPressed: () {},
+                padding: EdgeInsets.zero,
+                child: Icon(LucideIcons.plusCircle, size: 22),
+              ),
+            ].hStack(alignment: MainAxisAlignment.spaceBetween),
+            10.heightBox,
+            [
+              CupertinoSearchTextField().expand(),
+              CupertinoButton(
+                onPressed: () {
+                  showCupertinoModalPopup<void>(
+                    context: context,
+                    builder: (BuildContext context) => Container(
+                      height: 216,
+                      padding: const EdgeInsets.only(top: 6.0),
+                      margin: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
+                      ),
+                      color:
+                          CupertinoColors.systemBackground.resolveFrom(context),
+                      child: SafeArea(
+                        top: false,
+                        child: CupertinoDatePicker(
+                          initialDateTime: DateTime.now(),
+                          mode: CupertinoDatePickerMode.date,
+                          use24hFormat: true,
+                          // This shows day of week alongside day of month
+                          showDayOfWeek: true,
+                          // This is called when the user changes the date.
+                          onDateTimeChanged: (DateTime newDate) {},
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                padding: EdgeInsets.zero,
+                child: Icon(LucideIcons.calendar, size: 22),
+                // child: "Filter".text.size(16).make(),
+              ),
+            ].hStack(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 118.0;
+
+  @override
+  double get minExtent => 118.0;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
+}
 
 class MailingPage extends StatefulWidget {
   const MailingPage({super.key});
@@ -12,124 +93,42 @@ class MailingPage extends StatefulWidget {
 }
 
 class _MailingPageState extends State<MailingPage> {
-  final height = 120.0;
-
-  PreferredSizeWidget _buildAppBar() {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(height),
-      child: Container(
-        height: height,
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Icon(LucideIcons.building2, size: 25),
-                      SizedBox(width: 8),
-                      Text('Companies', style: TextStyle(fontSize: 22)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {}, icon: Icon(LucideIcons.calendar)),
-                      SizedBox(width: 6),
-                      IconButton(
-                          onPressed: () {}, icon: Icon(LucideIcons.search)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
-                child: Row(
-                  children: [
-                    InputChip(
-                      onPressed: () {},
-                      label: Text("ALL"),
-                      backgroundColor: Theme.of(context)
-                          .bottomNavigationBarTheme
-                          .backgroundColor,
-                      avatar: Icon(LucideIcons.check),
-                    ),
-                    for (final status in EmailJobStatus.values)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: InputChip(
-                          onPressed: () {},
-                          label: Text(
-                              status.toString().split('.').last.toUpperCase()),
-                          backgroundColor: Theme.of(context)
-                              .bottomNavigationBarTheme
-                              .backgroundColor,
-                          avatar: Icon(LucideIcons.check),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget? _buildFloatingActionButton() {
-    return FloatingActionButton(
-      child: Icon(LucideIcons.plus),
-      onPressed: () {},
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final companies = context.watch<EmailJobsProvider>().getCompanies();
     if (companies == null) return Container();
 
-    return Scaffold(
-      appBar: _buildAppBar(),
-      floatingActionButton: _buildFloatingActionButton(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: companies.length,
-                itemBuilder: (context, index) {
-                  final company = companies[index];
-                  return ListTile(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/company', arguments: {
-                        'id': company,
-                      });
-                    },
-                    leading: CircleAvatar(child: Text(company.name[0])),
-                    title: Text(company.name),
-                    subtitle: Text(
-                        "${company.jobCount.toString()} job${company.jobCount > 1 ? 's' : ''}"),
-                    trailing: Text(company.lastUpdated.toString()),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                  );
-                },
-              ),
-            ],
+    return CupertinoPageScaffold(
+      child: CustomScrollView(
+        slivers: [
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: _SearchBarDelegate(),
           ),
-        ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                final company = companies[index];
+                return CupertinoListTile.notched(
+                  // leading: CircleAvatar(child: company.name[0].text.make()),
+                  title: Text(company.name),
+                  subtitle: Text("${company.jobCount} jobs"),
+                  additionalInfo: Text(
+                    timestampToDateString(company.lastUpdated),
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  trailing: Icon(LucideIcons.chevronRight),
+                  onTap: () {
+                    // Navigator.of(context)
+                    //     .pushNamed('/mailing/company', arguments: company);
+                  },
+                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                );
+              },
+              childCount: companies.length,
+            ),
+          ),
+        ],
       ),
     );
   }

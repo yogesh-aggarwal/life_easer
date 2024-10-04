@@ -1,5 +1,5 @@
 import "package:firebase_core/firebase_core.dart";
-import "package:flutter/material.dart";
+import "package:flutter/cupertino.dart";
 import "package:life_easer/core/firebase_options.dart";
 import "package:life_easer/pages/login/login.dart";
 import "package:life_easer/pages/mailing/mailing.dart";
@@ -32,10 +32,10 @@ class Application extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return CupertinoApp(
       title: "Life Automation",
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+      theme: CupertinoThemeData(
         brightness: Brightness.dark,
       ),
       home: Root(),
@@ -69,24 +69,16 @@ class _RootState extends State<Root> {
     });
   }
 
-  Widget? _buildBody() {
-    return SafeArea(child: _pages[_selectedIndex]);
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return NavigationBar(
-      selectedIndex: _selectedIndex,
-      onDestinationSelected: (int index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
-      destinations: const <NavigationDestination>[
-        NavigationDestination(
+  CupertinoTabBar _buildBottomNavigationBar() {
+    return CupertinoTabBar(
+      currentIndex: _selectedIndex,
+      onTap: (value) => setState(() => _selectedIndex = value),
+      items: [
+        BottomNavigationBarItem(
             icon: Icon(LucideIcons.mailbox), label: "Mailing"),
-        NavigationDestination(
+        BottomNavigationBarItem(
             icon: Icon(LucideIcons.newspaper), label: "Publishing"),
-        NavigationDestination(
+        BottomNavigationBarItem(
             icon: Icon(LucideIcons.settings), label: "Settings"),
       ],
     );
@@ -95,13 +87,17 @@ class _RootState extends State<Root> {
   @override
   Widget build(BuildContext context) {
     final user = context.watch<UserProvider>().user;
-    if (user == null) {
-      return const Scaffold(body: LoginScreen());
-    }
+    // if (user == null) {
+    //   return const CupertinoPageScaffold(child: LoginScreen());
+    // }
 
-    return Scaffold(
-      body: _buildBody(),
-      bottomNavigationBar: _buildBottomNavigationBar(),
+    return CupertinoTabScaffold(
+      tabBar: _buildBottomNavigationBar(),
+      tabBuilder: (context, index) {
+        return CupertinoTabView(
+          builder: (context) => SafeArea(child: _pages[index]),
+        );
+      },
     );
   }
 }
